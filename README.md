@@ -3,7 +3,7 @@
 # StudyBuddy
 </div>
 
-Designed to connect people with similar study interests, Study Buddy helps users find others who share their study goals. Additionally, users can create a favorites page to keep track of their preferred study partners.
+Backend application designed to connect people with similar study interests, Study Buddy helps users find others who share their study goals. Additionally, users can create a favorites page to keep track of their preferred study partners.
 
 ### Running the App
 
