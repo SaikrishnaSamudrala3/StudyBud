@@ -17,11 +17,11 @@
         <form class="form" action="" method="POST">
           {% csrf_token %}
           <div class="form__group form__group">
-            <label for="room_name">Email</label>
+            <label for="room_name">Email<span class="form__required">*</span></label>
             <input id="username" name="email" type="email" placeholder="e.g. sai@email.com" />
           </div>
           <div class=" form__group">
-            <label for="password">Password</label>
+            <label for="password">Password<span class="form__required">*</span></label>
             <input id="password" name="password" type="password"
               placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" />
           </div>
@@ -64,7 +64,9 @@
 
           {% for field in form %}
           <div class="form__group form__group">
-            <label for="{{field.id_for_label}}">{{field.label}}</label>
+            <label for="{{field.id_for_label}}">
+              {{field.label}}{% if field.field.required %}<span class="form__required">*</span>{% endif %}
+            </label>
             {{field}}
             {% if field.errors %}
             <ul class="form__errors">
@@ -101,8 +103,8 @@
         </form>
 
         <div class="auth__action">
-          <p>Already signed up yet?</p>
-          <a href="{% url 'login' %}" class="btn btn--link">Sign Up</a>
+          <p>Already signed in?</p>
+          <a href="{% url 'login' %}" class="btn btn--link">Sign In</a>
         </div>
       </div>
     </div>

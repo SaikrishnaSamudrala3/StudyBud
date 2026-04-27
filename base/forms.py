@@ -29,6 +29,11 @@ class RoomForm(ModelForm):
 
 
 class UserForm(ModelForm):
+    avatar = forms.ImageField(
+        required=False,
+        widget=forms.FileInput(attrs={'id': 'avatar'}),
+    )
+
     class Meta:
         model = User
         fields = ['avatar', 'name', 'username', 'email', 'bio']

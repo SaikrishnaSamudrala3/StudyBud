@@ -1,4 +1,5 @@
 {% extends 'main.html' %}
+{% load avatar_tags %}
 
 {% block content %}
 <main class="profile-page layout layout--2">
@@ -60,7 +61,7 @@
             <p>Hosted By</p>
             <a href="{% url 'user-profile' room.host.id %}" class="room__author">
               <div class="avatar avatar--small">
-                <img src="{{room.host.avatar.url}}" />
+                <img src="{% avatar_url room.host %}" />
               </div>
               <span>@{{room.host.username}}</span>
             </a>
@@ -83,7 +84,7 @@
                 <div class="thread__author">
                   <a href="{% url 'user-profile' message.user.id %}" class="thread__authorInfo">
                     <div class="avatar avatar--small">
-                      <img src="{{message.user.avatar.url}}" />
+                      <img src="{% avatar_url message.user %}" />
                     </div>
                     <span>@{{message.user.username}}</span>
                   </a>
@@ -128,7 +129,7 @@
         {% for user in participants %}
         <a href="{%  url 'user-profile' user.id %}" class="participant">
           <div class="avatar avatar--medium">
-            <img src="{{user.avatar.url}}" />
+            <img src="{% avatar_url user %}" />
           </div>
           <p>
             {{user.name}}
