@@ -21,22 +21,24 @@
 
       <div class="activities-page layout__body">
 
-        {% for message in room_messages %}
+        {% for activity in recent_activities %}
         <div class="activities__box">
           <div class="activities__boxHeader roomListRoom__header">
-            <a href="{% url 'user-profile' message.user.id %}" class="roomListRoom__author">
+            {% if activity.user %}
+            <a href="{% url 'user-profile' activity.user.id %}" class="roomListRoom__author">
               <div class="avatar avatar--small">
-                <img src="{{message.user.avatar.url}}" />
+                <img src="{{activity.user.avatar.url}}" />
               </div>
               <p>
-                @{{message.user}}
-                <span>{{message.created|timesince}} ago</span>
+                @{{activity.user.username}}
+                <span>{{activity.created|timesince}} ago</span>
               </p>
             </a>
+            {% endif %}
 
-            {% if request.user == message.user %}
+            {% if activity.type == 'message' and request.user == activity.user %}
             <div class="roomListRoom__actions">
-              <a href="{% url 'delete-message' message.id %}">
+              <a href="{% url 'delete-message' activity.message.id %}">
                 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
                   <title>remove</title>
                   <path
@@ -49,12 +51,41 @@
 
           </div>
           <div class="activities__boxContent">
-            <p>replied to post “<a href="{% url 'room' message.room.id %}">{{message.room}}</a>”</p>
+            {% if activity.type == 'room' %}
+            <p>created room “<a href="{% url 'room' activity.room.id %}">{{activity.room.name}}</a>”</p>
             <div class="activities__boxRoomContent">
-              {{message.body}}
+              {{activity.room.description|default:'New study room'|truncatechars:90}}
+            </div>
+            {% else %}
+            <p>replied to post “<a href="{% url 'room' activity.room.id %}">{{activity.room}}</a>”</p>
+            <div class="activities__boxRoomContent">
+              {{activity.message.body}}
+            </div>
+            {% endif %}
+          </div>
+        </div>
+        {% empty %}
+        {% for activity in fallback_activities %}
+        <div class="activities__box">
+          <div class="activities__boxHeader roomListRoom__header">
+            <div class="roomListRoom__author">
+              <div class="avatar avatar--small">
+                <img src="/static/images/avatar.svg" />
+              </div>
+              <p>
+                @{{activity.username}}
+                <span>{{activity.time}}</span>
+              </p>
+            </div>
+          </div>
+          <div class="activities__boxContent">
+            <p>{{activity.title}}</p>
+            <div class="activities__boxRoomContent">
+              {{activity.body}}
             </div>
           </div>
         </div>
+        {% endfor %}
         {% endfor %}
 
       </div>

@@ -9,6 +9,28 @@
         </a>
         <div class="roomListRoom__actions">
             <span>{{room.created|timesince}} ago</span>
+            {% if show_join_controls %}
+            <div class="roomListRoom__join">
+                {% if request.user.is_authenticated %}
+                {% if request.user == room.host %}
+                <span class="join-status">Owner</span>
+                {% elif room.is_joined_by_request_user %}
+                <span class="join-status join-status--success">Joined</span>
+                {% elif room.join_request_status == 'pending' %}
+                <span class="join-status">Pending</span>
+                {% elif room.join_request_status == 'accepted' %}
+                <span class="join-status join-status--success">Accepted</span>
+                {% else %}
+                <form action="{% url 'request-join' room.id %}" method="POST">
+                    {% csrf_token %}
+                    <button class="btn btn--main btn--pill join-button" type="submit">Join</button>
+                </form>
+                {% endif %}
+                {% else %}
+                <a class="btn btn--main btn--pill join-button" href="{% url 'login' %}">Join</a>
+                {% endif %}
+            </div>
+            {% endif %}
         </div>
     </div>
     <div class="roomListRoom__content">

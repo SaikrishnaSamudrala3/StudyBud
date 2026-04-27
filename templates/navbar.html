@@ -22,7 +22,13 @@
             <!-- Logged In -->
             {% if request.user.is_authenticated %}
             <div class="header__user">
-                <a href="{% url 'update-user' %}">
+                <a href="{% url 'user-profile' request.user.id %}#invites" class="header__inviteLink">
+                    Invites
+                    {% if pending_invites_count %}
+                    <span>{{pending_invites_count}}</span>
+                    {% endif %}
+                </a>
+                <a href="{% url 'user-profile' request.user.id %}">
                     <div class="avatar avatar--medium active">
                         <img src="{{request.user.avatar.url}}" />
                     </div>

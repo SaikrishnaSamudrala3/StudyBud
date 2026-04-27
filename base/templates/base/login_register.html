@@ -64,10 +64,25 @@
 
           {% for field in form %}
           <div class="form__group form__group">
-            <label for="room_name">{{field.label}}</label>
+            <label for="{{field.id_for_label}}">{{field.label}}</label>
             {{field}}
+            {% if field.errors %}
+            <ul class="form__errors">
+              {% for error in field.errors %}
+              <li>{{error}}</li>
+              {% endfor %}
+            </ul>
+            {% endif %}
           </div>
           {% endfor %}
+
+          {% if form.non_field_errors %}
+          <ul class="form__errors">
+            {% for error in form.non_field_errors %}
+            <li>{{error}}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
 
 
           <button class="btn btn--main" type="submit">

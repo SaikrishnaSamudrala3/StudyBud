@@ -67,3 +67,17 @@ if (photoInput)
 // Scroll to Bottom
 const conversationThread = document.querySelector(".room__box");
 if (conversationThread) conversationThread.scrollTop = conversationThread.scrollHeight;
+
+// Timed messages
+const messages = document.querySelectorAll(".message");
+
+messages.forEach((message) => {
+  const closeButton = message.querySelector(".message__close");
+  const hideMessage = () => {
+    message.classList.add("is-hiding");
+    window.setTimeout(() => message.remove(), 300);
+  };
+
+  if (closeButton) closeButton.addEventListener("click", hideMessage);
+  window.setTimeout(hideMessage, 4000);
+});

@@ -30,10 +30,50 @@
         </div>
       </div>
 
+      {% if request.user == user %}
+      <div class="profile-tabs" id="invites">
+        <div class="profile-tabs__header">
+          <button class="profile-tabs__tab profile-tabs__tab--active" type="button">Invites</button>
+          <span>{{pending_invites.count}} Pending</span>
+        </div>
+
+        <div class="profile-tabs__body">
+          {% for invite in pending_invites %}
+          <div class="invite">
+            <div class="invite__details">
+              <a href="{% url 'user-profile' invite.user.id %}" class="roomListRoom__author">
+                <div class="avatar avatar--small">
+                  <img src="{{invite.user.avatar.url}}" />
+                </div>
+                <p>
+                  @{{invite.user.username}}
+                  <span>wants to join {{invite.room.name}}</span>
+                </p>
+              </a>
+            </div>
+            <div class="invite__actions">
+              <form action="{% url 'update-join-request' invite.id 'accept' %}" method="POST">
+                {% csrf_token %}
+                <button class="btn btn--main btn--pill invite__button" type="submit">Accept</button>
+              </form>
+              <form action="{% url 'update-join-request' invite.id 'reject' %}" method="POST">
+                {% csrf_token %}
+                <button class="btn btn--dark btn--pill invite__button invite__button--reject" type="submit">Reject</button>
+              </form>
+            </div>
+          </div>
+          {% empty %}
+          <div class="invite invite--empty">
+            <p>No pending invites right now.</p>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
       <div class="roomList__header">
         <div>
-          <h2>Study Rooms Hosted by dennis_ivy</a>
-          </h2>
+          <h2>Study Rooms Hosted by {{user.username}}</h2>
         </div>
       </div>
       {% include 'base/feed_component.html' %}
