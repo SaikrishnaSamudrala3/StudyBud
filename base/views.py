@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponse
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
@@ -328,8 +329,15 @@ def updateUser(request):
     form = UserForm(instance=user)
 
     if request.method == 'POST':
+        original_avatar_name = user.avatar.name
         form = UserForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
+            if request.FILES.get('avatar') and not settings.DEBUG:
+                messages.warning(
+                    request,
+                    'Avatar uploads need persistent cloud storage in production. Your profile text was updated.',
+                )
+                form.instance.avatar = original_avatar_name
             form.save()
             return redirect('user-profile', pk=user.id)
 
